@@ -1,0 +1,655 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>Privacy Policy — FallGrid | ParthOne Studio</title>
+  <meta name="description" content="Privacy Policy for FallGrid, a mobile puzzle game by ParthOne Studio." />
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@400;500;600;700&family=Sora:wght@400;500;600&display=swap" rel="stylesheet" />
+  <style>
+    :root {
+      --bg-deep: #06080f;
+      --bg-mid: #0c1020;
+      --surface: rgba(14, 20, 38, 0.72);
+      --surface-solid: #0e1426;
+      --border: rgba(120, 140, 200, 0.14);
+      --border-bright: rgba(56, 232, 255, 0.35);
+      --text: #eef2ff;
+      --muted: #9aa8c7;
+      --accent: #38e8ff;
+      --accent-2: #a78bfa;
+      --accent-warm: #f472b6;
+      --glow: rgba(56, 232, 255, 0.15);
+      --radius: 16px;
+      --radius-lg: 24px;
+      --font-display: "Space Grotesk", system-ui, sans-serif;
+      --font-body: "Sora", system-ui, sans-serif;
+      --max: 720px;
+    }
+
+    *, *::before, *::after { box-sizing: border-box; }
+
+    html {
+      scroll-behavior: smooth;
+    }
+
+    body {
+      margin: 0;
+      min-height: 100vh;
+      font-family: var(--font-body);
+      font-size: 1rem;
+      line-height: 1.7;
+      color: var(--text);
+      background: var(--bg-deep);
+      -webkit-font-smoothing: antialiased;
+    }
+
+    /* Ambient background */
+    .bg {
+      position: fixed;
+      inset: 0;
+      z-index: 0;
+      pointer-events: none;
+      overflow: hidden;
+    }
+
+    .bg__gradient {
+      position: absolute;
+      inset: 0;
+      background:
+        radial-gradient(ellipse 80% 50% at 50% -20%, rgba(56, 232, 255, 0.12), transparent 55%),
+        radial-gradient(ellipse 60% 40% at 100% 50%, rgba(167, 139, 250, 0.08), transparent 50%),
+        radial-gradient(ellipse 50% 30% at 0% 80%, rgba(244, 114, 182, 0.06), transparent 45%),
+        linear-gradient(180deg, var(--bg-deep) 0%, var(--bg-mid) 50%, var(--bg-deep) 100%);
+    }
+
+    .bg__grid {
+      position: absolute;
+      inset: 0;
+      background-image:
+        linear-gradient(rgba(56, 232, 255, 0.04) 1px, transparent 1px),
+        linear-gradient(90deg, rgba(56, 232, 255, 0.04) 1px, transparent 1px);
+      background-size: 48px 48px;
+      mask-image: radial-gradient(ellipse 70% 60% at 50% 30%, black 20%, transparent 75%);
+    }
+
+    .bg__orb {
+      position: absolute;
+      border-radius: 50%;
+      filter: blur(80px);
+      opacity: 0.5;
+    }
+
+    .bg__orb--1 {
+      width: 320px;
+      height: 320px;
+      top: -80px;
+      right: -60px;
+      background: rgba(56, 232, 255, 0.2);
+    }
+
+    .bg__orb--2 {
+      width: 240px;
+      height: 240px;
+      bottom: 10%;
+      left: -40px;
+      background: rgba(167, 139, 250, 0.15);
+    }
+
+    /* Layout */
+    .page {
+      position: relative;
+      z-index: 1;
+      max-width: calc(var(--max) + 80px);
+      margin: 0 auto;
+      padding: clamp(24px, 5vw, 48px) clamp(20px, 4vw, 32px) 80px;
+    }
+
+    /* Top nav */
+    .nav {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      margin-bottom: 32px;
+    }
+
+    .nav__brand {
+      display: inline-flex;
+      align-items: center;
+      gap: 10px;
+      text-decoration: none;
+      color: inherit;
+    }
+
+    .nav__icon {
+      width: 40px;
+      height: 40px;
+      border-radius: 11px;
+      background: linear-gradient(135deg, rgba(56, 232, 255, 0.25), rgba(167, 139, 250, 0.25));
+      border: 1px solid var(--border-bright);
+      display: grid;
+      place-items: center;
+      font-family: var(--font-display);
+      font-weight: 700;
+      font-size: 1rem;
+      color: var(--accent);
+      box-shadow: 0 0 20px var(--glow);
+    }
+
+    .nav__studio {
+      font-family: var(--font-display);
+      font-size: 0.8rem;
+      font-weight: 600;
+      letter-spacing: 0.06em;
+      text-transform: uppercase;
+      color: var(--muted);
+    }
+
+    .nav__links {
+      display: flex;
+      gap: 8px;
+    }
+
+    .nav__link {
+      padding: 8px 14px;
+      border-radius: 999px;
+      font-size: 0.85rem;
+      font-weight: 500;
+      color: var(--muted);
+      text-decoration: none;
+      border: 1px solid transparent;
+      transition: color 0.2s, border-color 0.2s, background 0.2s;
+    }
+
+    .nav__link:hover {
+      color: var(--text);
+      border-color: var(--border);
+      background: var(--surface);
+    }
+
+    .nav__link--active {
+      color: var(--text);
+      border-color: var(--border);
+      background: var(--surface);
+    }
+
+    /* Header */
+    .header {
+      text-align: center;
+      margin-bottom: 40px;
+    }
+
+    .header h1 {
+      font-family: var(--font-display);
+      font-size: clamp(2rem, 5vw, 2.75rem);
+      font-weight: 700;
+      letter-spacing: -0.03em;
+      margin: 0 0 12px;
+      line-height: 1.15;
+      background: linear-gradient(135deg, #fff 0%, var(--accent) 50%, var(--accent-2) 100%);
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+      background-clip: text;
+    }
+
+    .header__lead {
+      color: var(--muted);
+      font-size: 1.05rem;
+      max-width: 520px;
+      margin: 0 auto 28px;
+    }
+
+    .meta-row {
+      display: flex;
+      flex-wrap: wrap;
+      justify-content: center;
+      gap: 10px;
+    }
+
+    .meta-pill {
+      display: inline-flex;
+      align-items: center;
+      gap: 6px;
+      padding: 8px 14px;
+      border-radius: 999px;
+      font-size: 0.8rem;
+      font-weight: 500;
+      color: var(--muted);
+      background: var(--surface);
+      border: 1px solid var(--border);
+      backdrop-filter: blur(12px);
+    }
+
+    .meta-pill strong {
+      color: var(--text);
+      font-weight: 600;
+    }
+
+    /* Highlight callout */
+    .callout {
+      display: flex;
+      gap: 16px;
+      align-items: flex-start;
+      padding: 20px 22px;
+      margin-bottom: 36px;
+      border-radius: var(--radius);
+      background: linear-gradient(135deg, rgba(56, 232, 255, 0.08), rgba(167, 139, 250, 0.06));
+      border: 1px solid var(--border-bright);
+      box-shadow: 0 0 40px var(--glow);
+    }
+
+    .callout__icon {
+      flex-shrink: 0;
+      width: 40px;
+      height: 40px;
+      border-radius: 10px;
+      background: rgba(56, 232, 255, 0.12);
+      display: grid;
+      place-items: center;
+      font-size: 1.25rem;
+    }
+
+    .callout p {
+      margin: 0;
+      font-size: 0.95rem;
+      color: var(--text);
+      line-height: 1.6;
+    }
+
+    .callout strong {
+      color: var(--accent);
+    }
+
+    /* TOC */
+    .toc {
+      margin-bottom: 36px;
+      padding: 20px 22px;
+      border-radius: var(--radius);
+      background: var(--surface);
+      border: 1px solid var(--border);
+      backdrop-filter: blur(16px);
+    }
+
+    .toc__title {
+      font-family: var(--font-display);
+      font-size: 0.75rem;
+      font-weight: 600;
+      letter-spacing: 0.1em;
+      text-transform: uppercase;
+      color: var(--muted);
+      margin: 0 0 14px;
+    }
+
+    .toc ol {
+      margin: 0;
+      padding: 0;
+      list-style: none;
+      display: grid;
+      grid-template-columns: repeat(auto-fill, minmax(200px, 1fr));
+      gap: 6px 20px;
+    }
+
+    .toc a {
+      color: var(--muted);
+      text-decoration: none;
+      font-size: 0.88rem;
+      transition: color 0.2s;
+    }
+
+    .toc a:hover {
+      color: var(--accent);
+    }
+
+    /* Sections */
+    .sections {
+      display: flex;
+      flex-direction: column;
+      gap: 16px;
+    }
+
+    .section {
+      padding: 24px 26px;
+      border-radius: var(--radius);
+      background: var(--surface);
+      border: 1px solid var(--border);
+      backdrop-filter: blur(16px);
+      transition: border-color 0.25s, box-shadow 0.25s;
+    }
+
+    .section:hover {
+      border-color: rgba(56, 232, 255, 0.2);
+      box-shadow: 0 8px 32px rgba(0, 0, 0, 0.2);
+    }
+
+    .section__head {
+      display: flex;
+      align-items: flex-start;
+      gap: 14px;
+      margin-bottom: 14px;
+    }
+
+    .section__num {
+      flex-shrink: 0;
+      width: 32px;
+      height: 32px;
+      border-radius: 8px;
+      display: grid;
+      place-items: center;
+      font-family: var(--font-display);
+      font-size: 0.85rem;
+      font-weight: 700;
+      color: var(--accent);
+      background: rgba(56, 232, 255, 0.1);
+      border: 1px solid rgba(56, 232, 255, 0.2);
+    }
+
+    .section h2 {
+      font-family: var(--font-display);
+      font-size: 1.15rem;
+      font-weight: 600;
+      margin: 0;
+      line-height: 32px;
+      letter-spacing: -0.02em;
+      color: var(--text);
+    }
+
+    .section p,
+    .section li {
+      color: var(--muted);
+      margin: 0 0 12px;
+      font-size: 0.95rem;
+    }
+
+    .section p:last-child,
+    .section ul:last-child {
+      margin-bottom: 0;
+    }
+
+    .section strong {
+      color: var(--text);
+      font-weight: 600;
+    }
+
+    .section ul {
+      margin: 0 0 12px;
+      padding-left: 1.25rem;
+    }
+
+    .section li {
+      margin-bottom: 6px;
+    }
+
+    .section li::marker {
+      color: var(--accent);
+    }
+
+    /* Footer */
+    .footer {
+      margin-top: 48px;
+      padding-top: 28px;
+      border-top: 1px solid var(--border);
+      text-align: center;
+    }
+
+    .footer__line {
+      font-family: var(--font-display);
+      font-size: 0.85rem;
+      color: var(--muted);
+      letter-spacing: 0.02em;
+    }
+
+    .footer__studio {
+      margin-top: 6px;
+      font-size: 0.8rem;
+      color: rgba(154, 168, 199, 0.6);
+    }
+
+    @media (max-width: 520px) {
+      .callout {
+        flex-direction: column;
+        gap: 12px;
+      }
+
+      .section {
+        padding: 20px 18px;
+      }
+
+      .toc ol {
+        grid-template-columns: 1fr;
+      }
+    }
+
+    @media (prefers-reduced-motion: reduce) {
+      html { scroll-behavior: auto; }
+      .section { transition: none; }
+    }
+  </style>
+</head>
+<body>
+  <div class="bg" aria-hidden="true">
+    <div class="bg__gradient"></div>
+    <div class="bg__grid"></div>
+    <div class="bg__orb bg__orb--1"></div>
+    <div class="bg__orb bg__orb--2"></div>
+  </div>
+
+  <div class="page">
+    <nav class="nav" aria-label="Site">
+      <a class="nav__brand" href="index.html">
+        <span class="nav__icon" aria-hidden="true">FG</span>
+        <span class="nav__studio">ParthOne Studio</span>
+      </a>
+      <div class="nav__links">
+        <a class="nav__link" href="index.html">Home</a>
+        <a class="nav__link nav__link--active" href="privacy_policy.html" aria-current="page">Privacy Policy</a>
+      </div>
+    </nav>
+
+    <header class="header">
+      <h1>Privacy Policy</h1>
+      <p class="header__lead">
+        How FallGrid handles your information — plain language for players on iOS and Android.
+      </p>
+      <div class="meta-row">
+        <span class="meta-pill"><strong>FallGrid</strong> v1.0.0</span>
+        <span class="meta-pill">Effective <strong>June 1, 2026</strong></span>
+        <span class="meta-pill">By <strong>ParthOne Studio</strong></span>
+      </div>
+    </header>
+
+    <aside class="callout" role="note">
+      <div class="callout__icon" aria-hidden="true">🔒</div>
+      <p>
+        <strong>Your data stays on your device.</strong> No account required. The current version does not send gameplay data to our servers, and we do not sell personal information.
+      </p>
+    </aside>
+
+    <nav class="toc" aria-label="Table of contents">
+      <p class="toc__title">On this page</p>
+      <ol>
+        <li><a href="#intro">Introduction</a></li>
+        <li><a href="#who">Who we are</a></li>
+        <li><a href="#app">What the app is</a></li>
+        <li><a href="#collect">Information we collect</a></li>
+        <li><a href="#use">How we use it</a></li>
+        <li><a href="#storage">Storage & retention</a></li>
+        <li><a href="#children">Children’s privacy</a></li>
+        <li><a href="#third">Third parties</a></li>
+        <li><a href="#rights">Your rights</a></li>
+        <li><a href="#intl">International users</a></li>
+        <li><a href="#security">Security</a></li>
+        <li><a href="#changes">Changes</a></li>
+        <li><a href="#contact">Contact</a></li>
+      </ol>
+    </nav>
+
+    <article class="sections">
+      <section class="section" id="intro">
+        <div class="section__head">
+          <span class="section__num">1</span>
+          <h2>Introduction</h2>
+        </div>
+        <p>
+          FallGrid is a mobile puzzle game by ParthOne Studio. Scores and progress are stored only on your device. We do not require an account, and the current version does not send your gameplay data to our servers.
+        </p>
+        <p>
+          This Privacy Policy explains what information FallGrid uses, how we handle it, and your choices. By downloading or playing FallGrid, you agree to this policy. If you do not agree, please do not use the app.
+        </p>
+      </section>
+
+      <section class="section" id="who">
+        <div class="section__head">
+          <span class="section__num">2</span>
+          <h2>Who we are</h2>
+        </div>
+        <p>
+          FallGrid is published by <strong>ParthOne Studio</strong>.
+        </p>
+      </section>
+
+      <section class="section" id="app">
+        <div class="section__head">
+          <span class="section__num">3</span>
+          <h2>What the app is</h2>
+        </div>
+        <p>
+          FallGrid is a mobile puzzle game for iOS and Android. It is intended for a general audience. After install, you can play offline. Scores and progress are stored on your device only; there is no global online leaderboard.
+        </p>
+      </section>
+
+      <section class="section" id="collect">
+        <div class="section__head">
+          <span class="section__num">4</span>
+          <h2>Information we collect</h2>
+        </div>
+<p><strong>We do not collect personal information through FallGrid in the current version.</strong> There are no user accounts, registration, login, or social sign-in. The app does not transmit personal data to our servers unless noted below.</p>
+        <p>We do <strong>not</strong> collect your name, email, phone number, precise location, contacts, photos, microphone audio, or camera data.</p>
+        <p>Settings (such as sound levels and preferences) and game progress (such as scores, Data Shards, and upgrade purchases) are saved locally in app-private storage on your device (fallgrid_save.cfg). This data is not sent to ParthOne Studio in the current version.</p>
+        <p>If you enable haptics in Settings, the app may use short device vibration for feedback. This is not used to collect personal information.</p>
+        <p>On iOS, the app may use Apple required-reason APIs:</p><ul><li><strong>File timestamp</strong> — Used by the game engine for save files and asset caching (Apple required-reason APIs on iOS).</li><li><strong>System boot time</strong> — Used by the game engine for timing and session logic (Apple required-reason APIs on iOS).</li><li><strong>Disk space</strong> — Used to check available storage before writing save data (Apple required-reason APIs on iOS).</li></ul>
+      </section>
+
+      <section class="section" id="use">
+        <div class="section__head">
+          <span class="section__num">5</span>
+          <h2>How we use information</h2>
+        </div>
+        <p>In the current version of FallGrid:</p>
+        <ul>
+          <li><strong>Local save data</strong> is used only to remember your settings and progress on your device so you can continue playing.</li>
+          <li><strong>Haptics</strong>, when enabled, are used only to provide vibration feedback during play.</li>
+        </ul>
+        <p>
+          We do not use your gameplay data for advertising, profiling, or analytics in the current build. We do not sell personal information.
+        </p>
+      </section>
+
+      <section class="section" id="storage">
+        <div class="section__head">
+          <span class="section__num">6</span>
+          <h2>Storage and retention</h2>
+        </div>
+        <p>
+          Save data and settings remain on your device until you delete them or uninstall the app. Uninstalling FallGrid removes local save data from your device, subject to how your operating system handles app removal.
+        </p>
+        <p>
+          Because we do not operate user accounts or cloud saves in the current version, we do not hold your game progress on our servers. There is no server-side account data for us to delete.
+        </p>
+      </section>
+
+      <section class="section" id="children">
+        <div class="section__head">
+          <span class="section__num">7</span>
+          <h2>Children’s privacy</h2>
+        </div>
+        <p>
+          FallGrid does not knowingly collect personal information from children. The app has no accounts, and game data stays on the device, which limits privacy risk. Parents and guardians should still supervise young children’s use of mobile apps and games.
+        </p>
+        <p>
+          If you are a parent or guardian and have questions about FallGrid, please contact ParthOne Studio (see Section 13).
+        </p>
+      </section>
+
+      <section class="section" id="third">
+        <div class="section__head">
+          <span class="section__num">8</span>
+          <h2>Third parties</h2>
+        </div>
+<p>FallGrid is distributed through the Apple App Store and/or Google Play. Those stores have their own privacy policies for downloads and account data.</p>
+        <p>The current version does not include third-party analytics, advertising, or crash-reporting services. FallGrid does not use advertising or cross-app tracking and does not request camera, microphone, photo library, contacts, or location permissions unless listed in the store privacy label.</p>
+        <p>If we add features such as ads or analytics in a future version, we will update this Privacy Policy before they are released.</p>
+      </section>
+
+      <section class="section" id="rights">
+        <div class="section__head">
+          <span class="section__num">9</span>
+          <h2>Your rights</h2>
+        </div>
+        <p>
+          Depending on where you live, you may have rights to access, correct, delete, or restrict use of personal information, or to object to certain processing. Because FallGrid in its current version does not collect personal data on our servers and stores game data only on your device, most of your control is local:
+        </p>
+        <ul>
+          <li><strong>Delete local data:</strong> uninstall the app, or clear app data through your device settings where available.</li>
+          <li><strong>Reset tutorial:</strong> use Settings in the app.</li>
+        </ul>
+        <p>
+          For other privacy questions or requests, contact ParthOne Studio (see Section 13). We will respond to valid requests in line with applicable law where we are able to do so.
+        </p>
+      </section>
+
+      <section class="section" id="intl">
+        <div class="section__head">
+          <span class="section__num">10</span>
+          <h2>International users</h2>
+        </div>
+        <p>
+          FallGrid is available in various countries through the App Store and Google Play. If you use the app outside your home country, your device and the app stores may process information under their own rules and locations. ParthOne Studio does not receive your gameplay save file in the current version.
+        </p>
+        <p>
+          If you are in the European Economic Area, United Kingdom, or other regions with specific privacy laws, you may have additional rights. Contact ParthOne Studio (see Section 13) to exercise them where applicable.
+        </p>
+      </section>
+
+      <section class="section" id="security">
+        <div class="section__head">
+          <span class="section__num">11</span>
+          <h2>Security</h2>
+        </div>
+        <p>
+          Local save data is stored in app-private storage on your device. Because we do not collect gameplay data on our servers in the current version, there is no ParthOne Studio database of your scores or progress to secure. No method of electronic storage is completely secure; we encourage you to keep your device updated and protected with a passcode or biometric lock.
+        </p>
+      </section>
+
+      <section class="section" id="changes">
+        <div class="section__head">
+          <span class="section__num">12</span>
+          <h2>Changes to this policy</h2>
+        </div>
+        <p>
+          We may update this Privacy Policy from time to time, for example if we add new features (such as ads or analytics) or if laws change. When we update it, we will post the new version on this page and change the effective date at the top. Continued use of FallGrid after an update means you accept the revised policy, unless applicable law requires otherwise.
+        </p>
+      </section>
+
+      <section class="section" id="contact">
+        <div class="section__head">
+          <span class="section__num">13</span>
+          <h2>Contact us</h2>
+        </div>
+        <p>
+          If you have questions about this Privacy Policy or FallGrid’s privacy practices, contact:
+        </p>
+        <ul>
+          <li><strong>Developer:</strong> ParthOne Studio</li>
+        </ul>
+      </section>
+    </article>
+
+    <footer class="footer">
+      <p class="footer__line">FallGrid · Privacy Policy</p>
+      <p class="footer__studio">© ParthOne Studio</p>
+    </footer>
+  </div>
+</body>
+</html>

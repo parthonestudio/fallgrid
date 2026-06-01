@@ -1,0 +1,499 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>FallGrid — Mobile Puzzle Game | ParthOne Studio</title>
+  <meta name="description" content="FallGrid is a mobile puzzle game by ParthOne Studio. Drop, merge, and chase high scores on iOS and Android." />
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@400;500;600;700&family=Sora:wght@400;500;600&display=swap" rel="stylesheet" />
+  <style>
+    :root {
+      --bg-deep: #06080f;
+      --bg-mid: #0c1020;
+      --surface: rgba(14, 20, 38, 0.72);
+      --border: rgba(120, 140, 200, 0.14);
+      --border-bright: rgba(56, 232, 255, 0.35);
+      --text: #eef2ff;
+      --muted: #9aa8c7;
+      --accent: #38e8ff;
+      --accent-2: #a78bfa;
+      --glow: rgba(56, 232, 255, 0.15);
+      --radius: 16px;
+      --font-display: "Space Grotesk", system-ui, sans-serif;
+      --font-body: "Sora", system-ui, sans-serif;
+      --max: 680px;
+    }
+
+    *, *::before, *::after { box-sizing: border-box; }
+
+    html { scroll-behavior: smooth; }
+
+    body {
+      margin: 0;
+      min-height: 100vh;
+      font-family: var(--font-body);
+      font-size: 1rem;
+      line-height: 1.7;
+      color: var(--text);
+      background: var(--bg-deep);
+      -webkit-font-smoothing: antialiased;
+    }
+
+    .bg {
+      position: fixed;
+      inset: 0;
+      z-index: 0;
+      pointer-events: none;
+      overflow: hidden;
+    }
+
+    .bg__gradient {
+      position: absolute;
+      inset: 0;
+      background:
+        radial-gradient(ellipse 80% 50% at 50% -20%, rgba(56, 232, 255, 0.14), transparent 55%),
+        radial-gradient(ellipse 60% 40% at 100% 40%, rgba(167, 139, 250, 0.1), transparent 50%),
+        radial-gradient(ellipse 50% 30% at 0% 90%, rgba(244, 114, 182, 0.06), transparent 45%),
+        linear-gradient(180deg, var(--bg-deep) 0%, var(--bg-mid) 50%, var(--bg-deep) 100%);
+    }
+
+    .bg__grid {
+      position: absolute;
+      inset: 0;
+      background-image:
+        linear-gradient(rgba(56, 232, 255, 0.05) 1px, transparent 1px),
+        linear-gradient(90deg, rgba(56, 232, 255, 0.05) 1px, transparent 1px);
+      background-size: 48px 48px;
+      mask-image: radial-gradient(ellipse 80% 70% at 50% 20%, black 15%, transparent 70%);
+    }
+
+    .bg__orb {
+      position: absolute;
+      border-radius: 50%;
+      filter: blur(80px);
+      opacity: 0.55;
+    }
+
+    .bg__orb--1 {
+      width: 360px;
+      height: 360px;
+      top: -100px;
+      left: 50%;
+      transform: translateX(-50%);
+      background: rgba(56, 232, 255, 0.22);
+    }
+
+    .bg__orb--2 {
+      width: 200px;
+      height: 200px;
+      bottom: 15%;
+      right: -40px;
+      background: rgba(167, 139, 250, 0.18);
+    }
+
+    .page {
+      position: relative;
+      z-index: 1;
+      max-width: calc(var(--max) + 100px);
+      margin: 0 auto;
+      padding: clamp(20px, 4vw, 32px) clamp(20px, 4vw, 32px) 72px;
+    }
+
+    /* Top nav */
+    .nav {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      margin-bottom: clamp(32px, 8vw, 56px);
+    }
+
+    .nav__brand {
+      display: inline-flex;
+      align-items: center;
+      gap: 10px;
+      text-decoration: none;
+      color: inherit;
+    }
+
+    .nav__icon {
+      width: 40px;
+      height: 40px;
+      border-radius: 11px;
+      background: linear-gradient(135deg, rgba(56, 232, 255, 0.25), rgba(167, 139, 250, 0.25));
+      border: 1px solid var(--border-bright);
+      display: grid;
+      place-items: center;
+      font-family: var(--font-display);
+      font-weight: 700;
+      font-size: 1rem;
+      color: var(--accent);
+      box-shadow: 0 0 20px var(--glow);
+    }
+
+    .nav__studio {
+      font-family: var(--font-display);
+      font-size: 0.8rem;
+      font-weight: 600;
+      letter-spacing: 0.06em;
+      text-transform: uppercase;
+      color: var(--muted);
+    }
+
+    .nav__links {
+      display: flex;
+      gap: 8px;
+    }
+
+    .nav__link {
+      padding: 8px 14px;
+      border-radius: 999px;
+      font-size: 0.85rem;
+      font-weight: 500;
+      color: var(--muted);
+      text-decoration: none;
+      border: 1px solid transparent;
+      transition: color 0.2s, border-color 0.2s, background 0.2s;
+    }
+
+    .nav__link:hover {
+      color: var(--text);
+      border-color: var(--border);
+      background: var(--surface);
+    }
+
+    /* Hero */
+    .hero {
+      text-align: center;
+      margin-bottom: 40px;
+    }
+
+    .hero__tag {
+      display: inline-block;
+      margin-bottom: 16px;
+      padding: 6px 14px;
+      border-radius: 999px;
+      font-family: var(--font-display);
+      font-size: 0.75rem;
+      font-weight: 600;
+      letter-spacing: 0.08em;
+      text-transform: uppercase;
+      color: var(--accent);
+      background: rgba(56, 232, 255, 0.08);
+      border: 1px solid rgba(56, 232, 255, 0.25);
+    }
+
+    .hero h1 {
+      font-family: var(--font-display);
+      font-size: clamp(2.5rem, 8vw, 3.5rem);
+      font-weight: 700;
+      letter-spacing: -0.04em;
+      line-height: 1.1;
+      margin: 0 0 16px;
+      background: linear-gradient(135deg, #fff 0%, var(--accent) 45%, var(--accent-2) 100%);
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+      background-clip: text;
+    }
+
+    .hero__lead {
+      font-size: 1.1rem;
+      color: var(--muted);
+      max-width: 520px;
+      margin: 0 auto 28px;
+      line-height: 1.65;
+    }
+
+    .hero__lead strong {
+      color: var(--text);
+      font-weight: 600;
+    }
+
+    /* CTA buttons */
+    .cta-row {
+      display: flex;
+      flex-wrap: wrap;
+      justify-content: center;
+      gap: 12px;
+      margin-bottom: 12px;
+    }
+
+    .btn {
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      gap: 10px;
+      padding: 14px 24px;
+      border-radius: 12px;
+      font-family: var(--font-display);
+      font-size: 0.95rem;
+      font-weight: 600;
+      text-decoration: none;
+      transition: transform 0.2s, box-shadow 0.2s, border-color 0.2s;
+    }
+
+    .btn:active { transform: scale(0.98); }
+
+    .btn--primary {
+      color: var(--bg-deep);
+      background: linear-gradient(135deg, var(--accent), #2dd4bf);
+      border: 1px solid rgba(255, 255, 255, 0.2);
+      box-shadow: 0 4px 24px rgba(56, 232, 255, 0.35);
+    }
+
+    .btn--primary:hover {
+      box-shadow: 0 6px 32px rgba(56, 232, 255, 0.45);
+    }
+
+    .btn--ghost {
+      color: var(--text);
+      background: var(--surface);
+      border: 1px solid var(--border);
+      backdrop-filter: blur(12px);
+    }
+
+    .btn--ghost:hover {
+      border-color: var(--border-bright);
+    }
+
+    .btn svg {
+      width: 22px;
+      height: 22px;
+      flex-shrink: 0;
+    }
+
+    .cta-note {
+      font-size: 0.8rem;
+      color: rgba(154, 168, 199, 0.7);
+      margin: 0;
+    }
+
+    /* Cards */
+    .grid-2 {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(260px, 1fr));
+      gap: 16px;
+      margin-bottom: 16px;
+    }
+
+    .card {
+      padding: 22px 24px;
+      border-radius: var(--radius);
+      background: var(--surface);
+      border: 1px solid var(--border);
+      backdrop-filter: blur(16px);
+    }
+
+    .card h2 {
+      font-family: var(--font-display);
+      font-size: 1rem;
+      font-weight: 600;
+      letter-spacing: -0.02em;
+      margin: 0 0 14px;
+      color: var(--text);
+    }
+
+    .card p {
+      margin: 0 0 12px;
+      font-size: 0.92rem;
+      color: var(--muted);
+    }
+
+    .card p:last-child { margin-bottom: 0; }
+
+    .features {
+      list-style: none;
+      margin: 0;
+      padding: 0;
+      display: flex;
+      flex-direction: column;
+      gap: 10px;
+    }
+
+    .features li {
+      display: flex;
+      align-items: flex-start;
+      gap: 10px;
+      font-size: 0.92rem;
+      color: var(--muted);
+    }
+
+    .features__dot {
+      flex-shrink: 0;
+      width: 6px;
+      height: 6px;
+      margin-top: 9px;
+      border-radius: 50%;
+      background: var(--accent);
+      box-shadow: 0 0 8px var(--accent);
+    }
+
+    .meta-chips {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 8px;
+      margin-top: 4px;
+    }
+
+    .chip {
+      padding: 6px 12px;
+      border-radius: 8px;
+      font-size: 0.78rem;
+      font-weight: 500;
+      color: var(--muted);
+      background: rgba(0, 0, 0, 0.25);
+      border: 1px solid var(--border);
+    }
+
+    .privacy-banner {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      flex-wrap: wrap;
+      gap: 16px;
+      margin-top: 24px;
+      padding: 18px 22px;
+      border-radius: var(--radius);
+      background: linear-gradient(135deg, rgba(56, 232, 255, 0.06), rgba(167, 139, 250, 0.05));
+      border: 1px solid var(--border);
+    }
+
+    .privacy-banner p {
+      margin: 0;
+      font-size: 0.9rem;
+      color: var(--muted);
+      max-width: 400px;
+    }
+
+    .privacy-banner strong { color: var(--text); }
+
+    .footer {
+      margin-top: 48px;
+      padding-top: 24px;
+      border-top: 1px solid var(--border);
+      text-align: center;
+    }
+
+    .footer p {
+      margin: 0;
+      font-size: 0.85rem;
+      color: var(--muted);
+    }
+
+    .footer p + p {
+      margin-top: 6px;
+      font-size: 0.8rem;
+      opacity: 0.7;
+    }
+
+    @media (max-width: 520px) {
+      .nav { flex-direction: column; align-items: flex-start; gap: 16px; }
+      .cta-row { flex-direction: column; width: 100%; }
+      .btn { width: 100%; }
+      .privacy-banner { flex-direction: column; align-items: stretch; text-align: center; }
+      .privacy-banner .btn { width: 100%; }
+    }
+
+    @media (prefers-reduced-motion: reduce) {
+      html { scroll-behavior: auto; }
+      .btn { transition: none; }
+    }
+  </style>
+</head>
+<body>
+  <div class="bg" aria-hidden="true">
+    <div class="bg__gradient"></div>
+    <div class="bg__grid"></div>
+    <div class="bg__orb bg__orb--1"></div>
+    <div class="bg__orb bg__orb--2"></div>
+  </div>
+
+  <div class="page">
+    <nav class="nav" aria-label="Site">
+      <a class="nav__brand" href="index.html">
+        <span class="nav__icon" aria-hidden="true">FG</span>
+        <span class="nav__studio">ParthOne Studio</span>
+      </a>
+      <div class="nav__links">
+        <a class="nav__link" href="privacy_policy.html">Privacy Policy</a>
+      </div>
+    </nav>
+
+    <header class="hero">
+      <span class="hero__tag">Mobile puzzle · v1.0.0</span>
+      <h1>FallGrid</h1>
+      <p class="hero__lead">
+        Drop, merge, and climb the numbers. A fast <strong>puzzle roguelike</strong> for portrait play — chase high scores, unlock upgrades, and play <strong>offline</strong> anytime.
+      </p>
+
+      <div class="cta-row">
+        <!-- Replace href with your Google Play listing URL -->
+        <a
+          class="btn btn--primary"
+          id="play-store-link"
+          href="https://play.google.com/store/apps/details?id=com.parthonestudio.fallgrid"
+          rel="noopener noreferrer"
+          target="_blank"
+        >
+          <svg viewBox="0 0 24 24" fill="currentColor" aria-hidden="true">
+            <path d="M3.609 1.814L13.792 12 3.61 22.186a1.503 1.503 0 0 1-.152-.082 1.466 1.466 0 0 1-.567-1.134V2.93c0-.483.27-.926.718-1.116zm10.524 10.524l2.374 2.374 7.618-4.33a1.01 1.01 0 0 0 0-1.758l-7.618-4.33-2.374 2.374L19.28 12l-5.147 2.962zM5.102 23.258l9.84-9.84-2.374-2.374-7.466 7.466a1.01 1.01 0 0 0 .707 1.73l-.707.818zm0-22.516l7.466 7.466 2.374-2.374-9.84-9.84A1.01 1.01 0 0 0 3.89 2.93v18.14c0 .42.255.8.648.972l.564-.364z"/>
+          </svg>
+          Get it on Google Play
+        </a>
+        <a class="btn btn--ghost" href="privacy_policy.html">Privacy Policy</a>
+      </div>
+      <p class="cta-note">iOS coming soon · Android available on Google Play</p>
+    </header>
+
+    <div class="grid-2">
+      <section class="card">
+        <h2>About the game</h2>
+        <p>
+          FallGrid is a mobile puzzle game by ParthOne Studio for iOS and Android. Merge equal tiles on a grid, score points, and survive rising difficulty — inspired by classic merge puzzles with quick, session-friendly runs.
+        </p>
+        <div class="meta-chips">
+          <span class="chip">Portrait</span>
+          <span class="chip">One-thumb controls</span>
+          <span class="chip">Offline play</span>
+          <span class="chip">No account</span>
+        </div>
+      </section>
+
+      <section class="card">
+        <h2>Game modes</h2>
+        <ul class="features">
+          <li><span class="features__dot" aria-hidden="true"></span><strong style="color:var(--text)">Campaign</strong> — Level-based goals. Same challenge for every player on each level.</li>
+          <li><span class="features__dot" aria-hidden="true"></span><strong style="color:var(--text)">Endless</strong> — Survive as long as you can. Difficulty ramps over time.</li>
+          <li><span class="features__dot" aria-hidden="true"></span><strong style="color:var(--text)">Daily Challenge</strong> — Same puzzle seed for everyone today. Complete all objectives!</li>
+          <li><span class="features__dot" aria-hidden="true"></span><strong style="color:var(--text)">Timed Chaos</strong> — 90 seconds — hit every objective before time runs out!</li>
+        </ul>
+      </section>
+    </div>
+
+    <section class="card">
+      <h2>Features</h2>
+      <ul class="features">
+        <li><span class="features__dot" aria-hidden="true"></span>Earn <strong style="color:var(--text)">Data Shards</strong> and buy permanent upgrades in the in-app shop</li>
+        <li><span class="features__dot" aria-hidden="true"></span>Power-ups (CLR, ICE, BOM) and random modifiers keep each run fresh</li>
+        <li><span class="features__dot" aria-hidden="true"></span>Campaign, Endless, Daily challenge, and Timed chaos game modes</li>
+        <li><span class="features__dot" aria-hidden="true"></span>Local best scores on your device — no global online leaderboard</li>
+        <li><span class="features__dot" aria-hidden="true"></span>Adjustable music, sound effects, and optional haptic feedback</li>
+        <li><span class="features__dot" aria-hidden="true"></span>Progress saved on your device — no cloud account required</li>
+      </ul>
+    </section>
+
+    <aside class="privacy-banner">
+      <p>
+        <strong>Privacy-first.</strong> Scores and settings stay on your device. Read how we handle data in our privacy policy.
+      </p>
+      <a class="btn btn--ghost" href="privacy_policy.html">Read Privacy Policy</a>
+    </aside>
+
+    <footer class="footer">
+      <p>FallGrid · ParthOne Studio</p>
+      <p>© ParthOne Studio</p>
+    </footer>
+  </div>
+</body>
+</html>
